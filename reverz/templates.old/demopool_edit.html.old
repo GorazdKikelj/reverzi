@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}
+  Demo pool
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row text-center">
+    <div class="col-md-4">
+        <h3>Demo pool</h3>
+    </div>
+    <div class="col-md-8"></div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable dade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <div class="card text-center bg-dark">
+            <div class="card-body">
+            <form action="/demopool/update/{{demo.id}}" method="POST">
+                {{ demopool_form.hidden_tag() }}
+<!--                <img class="mb-4" src="static/HPE Selectium logo.jpg" alt=""> -->
+                <div class="form-group text-bg-dark">
+                    {{ demopool_form.id.label() }}
+                    {{ demopool_form.id(class="form-control", readonly='true') }}
+                </div>
+                <div class="form-group">
+                    {{ demopool_form.description.label() }}
+                    {{ demopool_form.description(class="form-control", rows="4") }}
+                </div>
+                <div class="form-group">
+                    {{ demopool_form.for_sale.label() }}
+                    {{ demopool_form.for_sale(class="form-control") }}
+                </div> 
+            </div>
+            <div class="card-footer">
+                {{ demopool_form.submit(class="btn btn-sm btn-block btn-primary") }}
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table id="demopool_list" class="table table-sm table-bordered table-dark">
+            <thead>
+                <tr>
+                    <td>Demo Pool</td>
+                    <td>Description</td>
+                    <td>For Sale</td>
+                    <td>Last change</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in demopools %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.description }}</td>
+                    <td>{{ row.for_sale }}</td>
+                    <td>{{ row.last_update }}</td>
+                    <td><a href="/demopool/edit/{{ row.id }}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="/demopool/delete/{{ row.id }}" class="btn btn-secondary btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+</div>
+</div>
+{% endblock %}

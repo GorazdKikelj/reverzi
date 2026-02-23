@@ -1,0 +1,173 @@
+{% extends 'clean.html' %}
+{% block title %}
+Inventurna lista
+{% endblock %}
+
+{% block content %}
+<table id="table" class="table-responsive table-sm table-hover" data-toggle="table" data-filter-control="true"
+    data-show-search-clear-button="true" data-sortable="true" data-pagination="true" data-page-list="[10,25,50,100,all]"
+    data-show-columns="true" data-show-columns-toggle-all="true">
+    <thead>
+        <tr class="text-black bg-secondary " scope="row" S style=" --bs-bg-opacity: .10;">
+            <!-- Your Columns HERE -->
+            <th data-valign="top">Akcija</th>
+            <th data-valign="top" data-field="selectium_asset" data-filter-control="input" data-sortable="True">
+                Selectium Inv.št.</th>
+            <th data-valign="top" data-field="produkt" data-filter-control="input" data-sortable="True">Part No</th>
+            <th data-valign="top" data-field="serijska_st" data-filter-control="input" data-sortable="True">Serial No
+            </th>
+            <th data-valign="top" data-field="opis" data-filter-control="input" data-sortable="True">Opis</th>
+            <th data-valign="top" data-field="notes" data-filter-control="input" data-sortable="True">Opombe</th>
+            <th data-valign="top" data-field="customer_name" data-filter-control="input" data-sortable="True">Stranka
+            </th>
+            <th data-valign="top" data-field="demo_pool" data-filter-control="select" data-sortable="True">Demo pool
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your reverz. inside the table HERE: -->
+
+        {% for reverz in reverzi %}
+        <tr>
+            <td>
+                <div class="d-grid gap-2 d-md-flex justify-content-center">
+                    {% if reverz.reverz_id%}
+                    <button class="btn btn-sm">
+                        <a href="{{ url_for('reverz-view',id=reverz.reverz_id|string )}}" title="View" target="view">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </button>
+                    {% endif %}
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm " data-bs-toggle="modal"
+                        data-bs-target="#reverzModal{{reverz.trans_id}}" title="Info">
+                        <i class="bi bi-info-square"></i>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="reverzModal{{reverz.trans_id}}" tabindex="-1"
+                        aria-labelledby="{{reverz.trans_id}}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reverzModalLabel{{reverz.trans_id}}">Podrobnosti
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table-responsive table-sm table-hover bg-white">
+                                        <tr>
+                                            <td>Status:</td>
+                                            <td>
+                                                <h5>{% if not reverz.demo_end_date  %}
+
+                                                    {% elif reverz.demo_end_date|string < datum_now|string and  reverz.reverz_active %}
+                                                    POTEKEL
+                                                    {% elif reverz.reverz_active %}
+                                                    IZDAN {% else %} ZAKLJUČEN {% endif %}</h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Reverz:</td>
+                                            <td>{{ reverz.reverz_id or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Transakcija:</td>
+                                            <td>{{ reverz.trans_id or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Demo inventarna št:</td>
+                                            <td>{{ reverz.inventarna_st or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selectium inventarna št:</td>
+                                            <td>{{ reverz.selectium_asset or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Part No:</td>
+                                            <td>{{ reverz.produkt or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Serijska št.:</td>
+                                            <td>{{ reverz.serijska_st or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Opis:</td>
+                                            <td>{{ reverz.opis or "" }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Demo pool:</td>
+                                            <td>{{ reverz.demo_pool or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Namen testiranja:</td>
+                                            <td>{{ reverz.namen or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Opombe:</td>
+                                            <td>{{ reverz.notes or "" }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Prevzel:</td>
+                                            <td>{{ reverz.customer_person_name or "" }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Izdal:</td>
+                                            <td>{{ reverz.person_name or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Datum izdaje:</td>
+                                            <td>{{ reverz.demo_start_date or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Izdan do:</td>
+                                            <td>{{ reverz.demo_end_date or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Datum vračila:</td>
+                                            <td>{{ reverz.demo_return_date or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Datum izdaje postavke:</td>
+                                            <td>{{ reverz.item_start_date or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Postavka izdana do:</td>
+                                            <td>{{ reverz.item_end_date or "" }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Postavka vrnjena:</td>
+                                            <td>{{ reverz.item_return_date or "" }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Zadnja sprememba:</td>
+                                            <td>{{ reverz.last_update or "" }} {{ reverz.last_user or "" }}</td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </td>
+            <td style="text-align: center;">{{ reverz.selectium_asset }}</td>
+            <td>{{ reverz.produkt }}</td>
+            <td>{{ reverz.serijska_st }}</td>
+            <td>{{ reverz.opis }}</td>
+            <td>{{ reverz.notes }}</td>
+            <td>{{ reverz.customer_name or ""}}</td>
+            <td>{{ reverz.demo_pool }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

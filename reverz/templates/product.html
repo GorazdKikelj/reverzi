@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}
+Produkti
+{% endblock %}
+
+
+{% block pagetitle %}
+Produkti
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;">
+    <div class="card-body">
+
+        {% if request.path == url_for('product_page') %}
+        <form action="{{url_for('product_page')}}" method="POST">
+            {% else %}
+            <form action="{{url_for('product_update',id=pro.ProductNo)}}" method="POST">
+                {% endif %}
+
+                {{ product_form.hidden_tag() }}
+                <div class="form-group text-bg-light">
+                    {{ product_form.productno.label() }}
+                    {% if request.path == url_for('product_page') %}
+                    {{ product_form.productno(class="form-control") }}
+                    {% else %}
+                    {{ product_form.productno(class="form-control", readonly="true") }}
+                    {% endif %}
+                </div>
+                <div class="form-group text-bg-dark">
+                    {{ product_form.description.label() }}
+                    {{ product_form.description(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ product_form.longdescription.label() }}
+                    {{ product_form.longdescription(class="form-control", rows="4") }}
+                </div>
+                <div class="form-group">
+                    {{ product_form.category.label() }}
+                    {{ product_form.category(class="form-control") }}
+                </div>
+    </div>
+    <div class="card-footer">
+        {{ product_form.submit(class="btn btn-primary") }}
+        <button class="btn ">
+            <a class="btn btn-info" href="{{url_for('product_page')}}">Prekliči</a>
+        </button>
+    </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top" data-field="ProductNo" data-filter-control="input" data-sortable="True">Produktna številka (Part
+    No)</th>
+<th data-valign="top" data-field="Description" data-filter-control="input" data-sortable="True">Naziv</th>
+<th data-valign="top">Podroben opis</th>
+<th data-valign="top" data-field="Category" data-filter-control="input" data-sortable="True">Kategorija</th>
+<th data-valign="top">Zadnja sprememba</th>
+<th data-valign="top">Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in products %}
+<tr>
+    <td>{{ row.ProductNo }}</td>
+    <td>{{ row.Description }}</td>
+    <td>{{ row.LongDescription }}</td>
+    <td>{{ row.Category }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary" href="{{url_for('product_edit',id=row.ProductNo)}}">Edit</a></button>
+            <button class="btn ">
+                <a class="btn btn-outline-danger"
+                    href="{{url_for('product_delete',id=row.ProductNo)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}
+{% block page_style %}
+{% endblock page_style %}

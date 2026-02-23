@@ -1,0 +1,11 @@
+{% extends 'clean.html' %}
+{% block title %}
+Export CSV za registracijo naprav v HPE Networking Support portalu
+{% endblock %}
+
+{% block content %}
+device name,serial number,description<br>
+{% for reverz in reverzi %}
+{{ reverz.produkt }}_{{reverz.serijska_st}},{{ reverz.serijska_st }},{{ reverz.opis }}<br>
+{% endfor %}
+{% endblock %}

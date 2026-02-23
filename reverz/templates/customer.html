@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}
+Stranke
+{% endblock %}
+
+
+{% block pagetitle %}
+Stranke
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;">
+    <div class="card-body">
+
+        {% if request.path == url_for('customer_page') %}
+        <form action="{{url_for('customer_page')}}" method="POST">
+            {% else %}
+            <form action="{{url_for('customer_update',id=cust.id)}}" method="POST">
+                {% endif %}
+                {{ cust_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ cust_form.name.label() }}
+                    {{ cust_form.name(class="form-control", placeholder="Company Name") }}
+                </div>
+                <div class="form-group">
+                    {{ cust_form.address.label() }}
+                    {{ cust_form.address(class="form-control", rows="4", placeholder="Company Address") }}
+                </div>
+                <div class="form-group">
+                    {{ cust_form.active.label() }}
+                    {{ cust_form.active(class="form-control-lg form-check-input") }}
+                </div>
+    </div>
+    <div class="card-footer">
+        {{ cust_form.submit(class="btn btn-primary") }}
+        <button class="btn">
+            <a class="btn btn-info" href="{{url_for('customer_page')}}">Prekliči</a>
+        </button>
+    </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top">#</th>
+<th data-valign="top" data-field="Name" data-filter-control="input" data-sortable="True">Stranka</th>
+<th data-valign="top">Naslov</th>
+<th data-valign="top" data-field="Active" data-filter-control="select">Aktivna</th>
+<th data-valign="top">Zadnja sprememba</th>
+<th data-valign="top">Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in customers %}
+<tr>
+    <td>{{ row.id }}</td>
+    <td>{{ row.Name }}</td>
+    <td>{{ row.Address }}</td>
+    <td>
+        {% if row.Active %}<i class="bi bi-check-circle-fill" style="color: green;"></i> DA {% else %} <i
+            class="bi bi-x-circle-fill" style="color: red;"></i> NE
+        {% endif %}
+    </td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary" href="{{url_for('customer_edit',id=row.id)}}">Edit</a></button>
+            <button class="btn ">
+                <a class="btn  btn-outline-danger" href="{{url_for('customer_delete', id=row.id)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

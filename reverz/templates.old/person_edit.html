@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}
+  Osebe
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row text-center">
+    <div class="col-md-4">
+        <h3>Osebe</h3>
+    </div>
+    <div class="col-md-8"></div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable dade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <div class="card text-center bg-dark">
+            <div class="card-body">
+            <form action="/person/update/{{per.id}}" method="POST">
+                {{ per_form.hidden_tag() }}
+<!--                <img class="mb-4" src="static/HPE Selectium logo.jpg" alt=""> -->
+                <div class="form-group text-bg-dark">
+                    {{ per_form.name.label() }}
+                    {{ per_form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ per_form.email.label() }}
+                    {{ per_form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ per_form.phone.label() }}
+                    {{ per_form.phone(class="form-control") }}
+                </div>
+            </div>
+            <div class="card-footer">
+                {{ per_form.submit(class="btn btn-sm btn-block btn-primary") }}
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table id="per_list" class="table table-sm table-bordered table-dark">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Personal Email</td>
+                    <td>Personal Phone</td>
+                    <td>Last change</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in persons %}
+                <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.Name }}</td>
+                    <td>{{ row.Email }}</td>
+                    <td>{{ row.Phone }}</td>
+                    <td>{{ row.last_update }}</td>
+                    <td><a href="/person/edit/{{ row.id }}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="/person/delete/{{ row.id }}" class="btn btn-secondary btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'clean.html' %}
+{% block title %}
+Reverz za stranko {{ customer_data.stranka }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-4 text-start">
+    <div class="row align-item-start">
+
+        <div class="col">
+            <h3><br>{{ customer_data.stranka }}</h3>
+            <p>{{ customer_data.naslov }}</p>
+            <p>Prevzel: {{ customer_data.prevzel }}<br>
+                Email: {{ customer_data.email }}<br>
+                Phone: {{ customer_data.phone }}</p>
+        </div>
+        <div class="col">
+            <h3>REVERZ: <a href="{{url_for('reverz_edit',id=customer_data.reverz)}}"
+                    title="Edit">{{ customer_data.reverz}}</a></h3>
+            {% if not customer_data.aktiven %}
+            <h3>ZAKLJUČEN</h3>
+            {% endif %}
+            <p>Izdan: {{ customer_data.datum_izdaje }}<br>
+                Velja do: {{ customer_data.cas_testiranja_do }}<br>
+                Dejansko vrnjen: {{ customer_data.vrnjeno or "" }}</p>
+            <p>Namen testiranja:<br> {{ customer_data.namen_testiranja }}
+            </p>
+            <p>Rezultat testiranja:</p>
+            {% if request.path in url_for("reverz_close", id=customer_data.reverz) %}
+            <form action="{{url_for('reverz_close', id=customer_data.reverz)}}" method="POST" id="Update"">
+                <div>{{ close_form.demo_result( rows="4" ) }}</div>
+                <div>{{ close_form.submit(class="btn btn-lg btn-danger") }}</div>
+            </form>
+            {% else %}
+            {{ customer_data.rezultat_testiranja or "" }}
+            {% endif %}
+        </div>
+        <div class=" col">
+                <p>Selectium Adriatics d.o.o.<br>
+                    Letališka cesta 29c<br>
+                    1000 Ljubljana<br>
+                    Slovenija</p>
+                <p>Izdal: {{ customer_data.izdal  }}</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table-responsive table-sm table-hover table-bordered table-sm" data-toggle="table"
+            data-filter-control="true" data-show-search-clear-button="true" data-sortable="true" data-pagination="false"
+            data-page-list="[10,25,50,100,all]" data-show-columns="true" data-show-columns-toggle-all="true"
+            data-filter-controll-multiple-search="true" data-sort-select-options="true">
+            <thead>
+                <tr class="text-black bg-secondary " scope="row" style="--bs-bg-opacity: .10;">
+                    <th scope="col" data-valign="top" data-field="aktivna" data-filter-control="select"
+                        data-sortable="True">Aktivna</th>
+                    <th scope="col" data-valign="top" data-field="koda" data-filter-control="input"
+                        data-sortable="True">Prod.št.</th>
+                    <th scope="col" data-valign="top" data-field="serijska" data-filter-control="input"
+                        data-sortable="True">Serijska št.</th>
+                    <th scope="col" data-valign="top" data-field="opis" data-filter-control="input"
+                        data-sortable="True">Opis</th>
+                    <th scope="col" data-valign="top" data-field="začetek" data-filter-control="input"
+                        data-sortable="True">Izdan</th>
+                    <th scope="col" data-valign="top">Velja do</th>
+                    <th scope="col" data-valign="top">Dejansko vrnjen</th>
+                    <th scope="col" data-valign="top" data-field="demo_pool" data-filter-control="select"
+                        data-sortable="True">Demo Pool</th>
+                    <th scope="col" data-valign="top">Opomba</th>
+                    <th scope="col" data-valign="top"># transakcija</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for reverz in reverz_data %}
+                <tr>
+                    <td>{% if reverz.aktivna: %}Aktivna <i class="bi bi-check-circle-fill" style="color: green;"></i>
+                        {% else %}
+                        Arhiv <i class="bi bi-archive-fill" style="color: red;"></i>
+                        {% endif %}
+                    </td>
+                    <td>{{ reverz.koda }}</td>
+                    <td>{{ reverz.serijska or "" }}</td>
+                    <td>{{ reverz.opis }}
+                        {% if reverz.dolgiopis==None or reverz.dolgiopis=='' %}
+                        {% else %}
+                        <pre>{{ reverz.dolgiopis }}</pre>
+                        {% endif %}
+                        {% if reverz.namen==None or reverz.namen=='' %}
+                        {% else%}
+                        <hr>
+                        <pre>{{ reverz.namen }}</pre>
+                        {% endif %}
+                        {% if reverz.notes==None or reverz.notes=='' or reverz.notes==' ' %}
+                        {% else %}
+                        <hr><strong>Notes:</strong><br />
+                        <pre>{{ reverz.notes }}</pre>
+                        {% endif %}
+                    </td>
+                    <td>{{ reverz.začetek }}</td>
+                    <td>{{ reverz.konec }}</td>
+                    <td>{{ reverz.vrnitev or "" }}</td>
+                    <td>{{ reverz.demo_pool or "" }}</td>
+                    <td>{{ reverz.part_notes or "" }}</td>
+                    <td><a class="btn  btn-outline-primary"
+                            href="{{url_for('reverz_edit_item',rev_id=customer_data.reverz,id=reverz.trans_id)}}">{{ reverz.trans_id }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+{% endblock %}

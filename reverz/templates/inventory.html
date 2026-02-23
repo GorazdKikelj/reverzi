@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}
+Inventory
+{% endblock %}
+
+
+{% block pagetitle %}
+Inventory
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;"">
+    <div class=" card-body">
+
+    {% if request.path == url_for('inventory_page') %}
+    <form action="{{url_for('inventory_page')}}" method="POST">
+        {{ inventory_form.hidden_tag() }}
+        <div class="form-group text-bg-dark">
+            {{ inventory_form.product_no.label() }}
+            {{ inventory_form.product_no(class="form-control") }}
+        </div>
+
+        {% else %}
+        <form action="{{url_for('inventory_update', id=inv.inventarna_st, product=product_no)}}" method="POST">
+            {{ inventory_form.hidden_tag() }}
+            <div class="form-group text-bg-dark">
+                {{ inventory_form.id.label() }}
+                {{ inventory_form.id(class="form-control", readonly="True") }}
+            </div>
+            <div class="form-group text-bg-dark">
+                {{ inventory_form.product_no.label() }}
+                {{ inventory_form.product_no(class="form-control", readonly="True") }}
+            </div>
+
+            {% endif %}
+            <div class="form-group text-bg-dark">
+                {{ inventory_form.serial_no.label() }}
+                {{ inventory_form.serial_no(class="form-control") }}
+            </div>
+            <div class="form-group text-bg-dark">
+                {{ inventory_form.selectium_asset.label() }}
+                {{ inventory_form.selectium_asset(class="form-control") }}
+            </div>
+            <div class="form-group text-bg-dark">
+                {{ inventory_form.demo_pool.label() }}
+                {{ inventory_form.demo_pool(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ inventory_form.available.label() }}
+                {% if request.path == "/inventory" %}
+                {{ inventory_form.available(class="form-control-lg form-check-input", checked="checked") }}
+                {% else%}
+                {{ inventory_form.available(class="form-control-lg form-check-input") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ inventory_form.notes.label() }}
+                {{ inventory_form.notes(class="form-control", rows="4") }}
+            </div>
+</div>
+<div class="card-footer">
+    {{ inventory_form.submit(class="btn btn-primary") }}
+    <button class="btn">
+        <a class="btn btn-info" href="{{url_for('inventory_page')}}">Prekliči</a>
+    </button>
+</div>
+</form>
+</div>
+
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top" data-field="inventarna_st" data-filter-control="input" data-sortable="True">Demo Inv.Št.</th>
+<th data-valign="top" data-field="selectium_asset" data-filter-control="input" data-sortable="True">Sel.Inv.Št.</th>
+<th data-valign="top" data-field="produkt" data-filter-control="input" data-sortable="True">Produktna št.</th>
+<th data-valign="top" data-field="serijska_st" data-filter-control="input" data-sortable="True">Serijska št.</th>
+<th data-valign="top" data-field="opis" data-filter-control="input" data-sortable="True">Opis</th>
+<th data-valign="top" data-field="razpolozljiva" data-filter-control="select">Za izposojo</th>
+<th data-valign="top" data-field="demo_pool" data-filter-control="input" data-sortable="True">Demo Pool</th>
+<th data-valign="top" data-field="reverz_id" data-filter-control="input" data-sortable="True">Reverz</th>
+<th data-valign="top">Trans.</th>
+<th data-valign="top">Zadnja sprememba</th>
+<th data-valign="top">Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in inventory %}
+<tr>
+    <td>{{ row.inventarna_st }}</td>
+    <td>{{ row.selectium_asset or ""}}</td>
+    <td>{{ row.produkt }}</td>
+    <td>{{ row.serijska_st or "" }}</td>
+    <td>{{ row.opis or "" }}
+        {% if row.notes==None or row.notes=='' %}
+        {% else %}
+        <hr>{{ row.notes }}
+        {% endif %}
+    </td>
+    <td>{% if row.razpolozljiva %}<i class="bi bi-check-circle-fill" style="color: green;"></i> DA {% else %} <i
+            class="bi bi-x-circle-fill" style="color: red;"></i> NE
+        {% endif %}
+    </td>
+    <td>{{ row.demo_pool or "" }}</td>
+    <td>{{ row.reverz_id or "" }}</td>
+    <td>{{ row.trans_id or "" }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary"
+                    href="{{url_for('inventory_edit', id=row.inventarna_st, product=row.produkt)}}">Edit</a></button>
+            <button class="btn ">
+                <a class="btn btn-outline-danger"
+                    href="{{url_for('inventory_delete',id=row.inventarna_st)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

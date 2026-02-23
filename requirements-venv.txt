@@ -1,0 +1,11 @@
+boto3
+Flask
+flask_bcrypt
+Flask_CKEditor
+Flask_Login
+flask_sqlalchemy
+Flask_WTF
+psycopg2
+pyrad
+python_dateutil
+WTForms

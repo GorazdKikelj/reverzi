@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}
+Demo Pool
+{% endblock %}
+
+
+{% block pagetitle %}
+Demo Pool
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;">
+    <div class="card-body">
+
+        {% if request.path == url_for('demopool_page') %}
+        <form action="{{url_for('demopool_page')}}" method="POST">
+            {% else %}
+            <form action="{{url_for('demopool_update', id=demo.id)}}" method="POST">
+                {% endif %}
+
+                {{ demopool_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ demopool_form.id.label() }}
+                    {% if request.path == "/demopool": %}
+                    {{ demopool_form.id(class="form-control", placeholder="Demo Pool") }}
+                    {% else %}
+                    {{ demopool_form.id(class="form-control", placeholder="Demo Pool", readonly="true") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ demopool_form.description.label() }}
+                    {{ demopool_form.description(class="form-control", rows="4", placeholder="Description") }}
+                </div>
+                <div class="form-group">
+                    {{ demopool_form.for_sale.label() }}
+                    {{ demopool_form.for_sale(class="form-control-lg form-check-input", checked="checked") }}
+                </div>
+    </div>
+    <div class="card-footer">
+        {{ demopool_form.submit(class="btn btn-primary") }}
+        <button class="btn">
+            <a class="btn btn-info" href="{{url_for('demopool_page')}}">Prekliči</a>
+        </button>
+    </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block tableheader %}
+<th>Demo Pool</th>
+<th>Opis</th>
+<th>Za prodajo</th>
+<th>Zadnja sprememba</th>
+<th>Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in demopools %}
+<tr>
+    <td>{{ row.id }}</td>
+    <td>{{ row.description }}</td>
+    <td>{{ row.for_sale }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary" href="{{url_for('demopool_edit',id=row.id)}}">Edit</a></button>
+            <button class="btn ">
+                <a class="btn btn-outline-danger" href="{{url_for('demopool_delete', id=row.id)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

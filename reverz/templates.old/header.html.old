@@ -1,0 +1,43 @@
+<body>
+    <nav class="navbar navbar-expand-md navbar-light  bg-secondary" style="--bs-bg-opacity: .25;">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home_page') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('reverz_page') }}">Reverzi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('customer_page') }}">Stranke</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('person_page') }}">Osebe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('employee_page') }}">Zaposleni</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('category_page') }}">Kategorije</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('product_page') }}">Produkti</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('demopool_page') }}">Demo pool</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('inventory_page') }}">Inventar</a>
+                </li>
+
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>

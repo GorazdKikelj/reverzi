@@ -1,0 +1,12 @@
+boto3==1.26.106
+Flask==2.2.3
+flask_bcrypt==1.0.1
+Flask_CKEditor==0.4.6
+Flask_Login==0.6.2
+flask_sqlalchemy==3.0.5
+Flask_WTF==1.1.1
+psycopg2==2.9.3
+py_radius==2.0.2.post1
+pyrad==2.4
+python_dateutil==2.8.2
+WTForms==3.0.1

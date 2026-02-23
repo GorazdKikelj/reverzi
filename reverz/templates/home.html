@@ -1,0 +1,78 @@
+{% extends 'clean.html' %}
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block content %}
+<table id="table_list" class="table-responsive table-sm table-hover" data-toggle="table""
+            data-filter-control=" true" data-show-search-clear-button="true" data-sortable="true"
+    data-pagination="false" data-show-columns="true" data-show-columns-toggle-all="true">
+    <thead>
+        <tr class="text-black bg-secondary " scope="row" style="--bs-bg-opacity: .10;">
+            <!-- Your Columns HERE -->
+            <th data-valign="top">Akcija</th>
+            <th data-valign="top" data-field="reverz_id" data-filter-control="select" data-sortable="True">Reverz</th>
+            <th data-valign="top" data-field="aktiven" data-filter-control="select" data-sortable="True">Status</th>
+            <th data-valign="top" data-field="stranka" data-filter-control="input" data-sortable="True">Stranka</th>
+            <th data-valign="top" data-field="prevzel" data-filter-control="input" data-sortable="True">Prevzel</th>
+            <th data-valign="top" data-field="izdal" data-filter-control="input" data-sortable="True">Izdal</th>
+            <th data-valign="top">Datum izdaje</th>
+            <th data-valign="top" data-field="cas_testiranja_do" data-filter-control="input" data-sortable="True">Datum
+                poteka</th>
+            <th data-valign="top">Datum vrnitve</th>
+            <th data-valign="top">Namen</th>
+            <th data-valign="top">Spremenjeno</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+
+        {% for reverz in reverzi %}
+        <tr>
+            <td>
+                <div class="d-grid gap-1 d-md-flex justify-content-md-end">
+
+                    <button class="btn btn-sm">
+                        <a href="{{url_for('reverz_print_page',id=reverz.reverz)}}" title="Print">
+                            <i class="bi bi-printer"></i>
+                        </a>
+                    </button>
+                    <button class="btn btn-sm">
+                        <a href="{{url_for('reverz_edit',id=reverz.reverz)}}" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </button>
+                    <button class="btn btn-sm">
+                        <a href="{{url_for('reverz-view',id=reverz.reverz)}}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </button>
+                </div>
+            </td>
+            <td style="text-align: center;">{{ reverz.reverz }}</td>
+            <td style="text-align: center;">{% if  reverz.aktiven %}
+                <i class="bi bi-check-circle-fill" style="color: green;"></i><br>Aktiven
+                {% else %}
+                <i class="bi bi-x-circle-fill" style="color: red;"></i><br>Zaključen
+                {% endif %}
+            </td>
+            <td>{{ reverz.stranka }}<br>{{ reverz.naslov }}</td>
+            <td>{{ reverz.prevzel }}</td>
+            <td>{{ reverz.izdal }}</td>
+            <td>{{ reverz.datum_izdaje }}</td>
+            <td>{{ reverz.cas_testiranja_do or "" }}
+                {% if reverz.cas_testiranja_do|string < datum_now and reverz.aktiven %} <strong>POTEKEL</strong>
+                {% endif %}
+            </td>
+            <td>{{ reverz.vrnjeno or "" }}</td>
+            <td>{{ reverz.namen_testiranja }}</td>
+            <td>{{ reverz.last_update }} {{ reverz.last_user or "" }}</td>
+
+        </tr>
+        </a></div>
+
+        </div>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

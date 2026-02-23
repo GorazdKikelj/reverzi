@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+     <head>
+          <!-- Required meta tags -->
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          {% include 'bootstrap.html' %}
+
+          <title>
+               {% block title %}
+
+               {% endblock %}
+          </title>
+
+     </head>
+     {% include 'header.html' %}
+
+     <div class="container-fluid">
+          <div class="row">
+               <div class="col-md-12">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert  alert-{{category}} alert-dismissable fade show" role="alert">
+
+                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                              title="Close">
+                              <span aria-hidden="true">&nbsp;</span>
+                         </button>
+                         <pre>{{ message }}</pre>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+
+               </div>
+          </div>
+     </div>
+     <div class="container-fluid">
+          <div class="row text-center">
+               <div class="col-md-4">
+                    <h3>
+                         {% block pagetitle %}
+                         Page Title
+                         {% endblock %}</h3>
+               </div>
+               <div class="col-md-8"></div>
+          </div>
+
+          <div class="row">
+               <div class="col-md-4">
+                    {% block entryform %}
+                    {% endblock %}
+               </div>
+
+               <div class="col-md-8 bg-light">
+
+                    <table id="table_list" class="table-responsive table-sm table-hover bg-white" data-toggle="table""
+                         data-filter-control=" true" data-show-search-clear-button="true" data-sortable="true"
+                         data-pagination="true" data-page-list="[10,25,50,100,all]" data-show-columns="true"
+                         data-show-columns-toggle-all="true">
+                         <thead>
+                              <tr class="text-black bg-secondary " scope="row" style="--bs-bg-opacity: .10;">
+                                   {% block tableheader %}
+                                   {% endblock %}
+                              </tr>
+                         </thead>
+                         <tbody>
+                              {% block tablerows %}
+                              {% endblock %}
+                         </tbody>
+                    </table>
+               </div>
+          </div>
+     </div>
+     {% block formend %}
+     {% endblock formend %}
+     {% extends 'footer.html' %}

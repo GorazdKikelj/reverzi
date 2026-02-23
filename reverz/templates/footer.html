@@ -1,0 +1,117 @@
+{% block page_style %}
+
+{% endblock page_style %}
+
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+        $('.helpModal').click(function () {
+            var id = $(this).data('id');
+            var fnc = $(this).data('fnc');
+            var msg = "<h4>" + id + '</h4>'
+            $.ajax({
+                url: '/ajaxfile',
+                type: 'post',
+                data: { id: id },
+                success: function (data) {
+                    $('.modal-header').html(msg);
+                    $('.modal-body').html(data.htmlresponse);
+                    $('#helpModal').modal('show');
+                },
+                error: function () {
+                    $('.modal-body').html(' Error on key ', id);
+                }
+
+            });
+        })
+    });
+    /*
+        $(document).ready(function () {
+            $('.reverzModal').click(function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/ajaxreverz',
+                    type: 'post',
+                    data: { id: id },
+                    success: function (data) {
+                        $('.modal-header').html(id);
+                        $('.modal-body').html(data.htmlresponse);
+                        $('.modal-body').append(' Dodaten string', id);
+                        $('#reverzModal').modal('show');
+                    },
+                    error: function () {
+                        $('.modal-body').html(' Dodan error sting ', id);
+                    }
+    
+                });
+    
+    
+            })
+        });
+    */
+    $('#reverzModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var id = button.data('id'); // Extract info from data-* attributes
+        var fnc = button.data('fnc')
+        var msg = "<h4>" + id + '</h4>'
+
+        $.ajax({
+            url: '/ajaxreverz',
+            type: 'post',
+            data: { id: id },
+            success: function (data) {
+                $('.modal-header').html(msg);
+                $('.modal-body').html(data.htmlresponse);
+                $('#reverzModal').modal('show');
+            },
+            error: function () {
+                $('.modal-body').html(' Error on key ', id);
+            }
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        });
+        //        var modal = $(this)
+        //        modal.find('.modal-title').text('New message to ' + id)
+        //        modal.find('.modal-body input').val(id)
+        //
+    });
+</script>
+<div class="modal hide fade in" id="helpModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>{{id_req}}</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <a class="btn" href="{{ url_for('help_edit', id=request.path|replace('/','#'), base_page='True') }}"
+                    method="'POST">Edit
+                    Page Help</a>
+                <a class="btn" href="{{ url_for('help_edit', id=request.path|replace('/','#')) }}" method="'POST">Edit
+                    Current Page Help</a>
+                <a class="btn" data-bs-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal hide fade in" id="reverzModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="btn" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i></a>helo title
+            </div>
+            <div class="modal-body">helo body
+            </div>
+            <div class="modal-footer">
+                <a class="btn" data-bs-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>

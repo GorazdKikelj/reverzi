@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}
+Zaposleni
+{% endblock %}
+
+
+{% block pagetitle %}
+Zaposleni
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;"">
+    <div class=" card-body">
+
+    {% if request.path == url_for('employee_page') %}
+    <form action="{{url_for('employee_page')}}" method="POST">
+        {% else %}
+        <form action="{{url_for('employee_update', person_id=emp.personid, customer_id=emp.customerid)}}" method="POST">
+            {% endif %}
+            {{ employee_form.hidden_tag() }}
+            <div class="form-group text-bg-dark">
+                {{ employee_form.person_id.label() }}
+                {{ employee_form.person_id(class="form-control") }}
+                {% for error in employee_form.person_id.errors %}
+                {{ error }}
+                {% endfor %}
+
+            </div>
+            <div class="form-group text-bg-dark">
+                {{ employee_form.customer_id.label() }}
+                {{ employee_form.customer_id(class="form-control") }}
+                {% for error in employee_form.customer_id.errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            <div class="form-group text-bg-dark">
+                {{ employee_form.title.label() }}
+                {{ employee_form.title(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ employee_form.email.label() }}
+                {{ employee_form.email(class="form-control") }}
+                {% if employee_form.email.errors %}
+                <ul class="errors">
+                    {% for error in employee_form.email.errors %}
+                    {{ error }}
+                    {% endfor %}
+
+                </ul>
+                {% endif %}
+
+            </div>
+            <div class="form-group">
+                {{ employee_form.status.label() }}
+                {% if request.path == url_for('employee_page') %}
+                {{ employee_form.status(class="form-control-lg form-check-input", checked="checked") }}
+                {% else %}
+                {{ employee_form.status(class="form-control-lg form-check-input") }}
+                {% endif %}
+            </div>
+</div>
+<div class="card-footer">
+    {{ employee_form.submit(class="btn btn-primary") }}
+    <button class="btn">
+        <a class="btn btn-info" href="{{url_for('employee_page')}}">Prekliči</a>
+    </button>
+</div>
+</form>
+</div>
+
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top" data-field="customer" data-filter-control="input" data-sortable="True">Stranka</th>
+<th data-valign="top" data-field="name" data-filter-control="input" data-sortable="True">Ime in priimek</th>
+<th data-valign="top">Službeni naziv</th>
+<th data-valign="top" data-field="status" data-filter-control="select">Aktiven</th>
+<th data-valign="top">Službeni Email</th>
+<th data-valign="top">Zadnja sprememba</th>
+<th data-valign="top">Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in employees %}
+<tr>
+    <td>{{ row.customer }}</td>
+    <td>{{ row.name }}</td>
+    <td>{{ row.title }}</td>
+    <td>
+        {% if row.status %}<i class="bi bi-check-circle-fill" style="color: green;"></i> DA {% else %} <i
+            class="bi bi-x-circle-fill" style="color: red;"></i> NE
+        {% endif %}
+    </td>
+    <td>{{ row.companyemail }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary"
+                    href="{{url_for('employee_edit', person_id=row.personid, customer_id=row.customerid)}}">Edit</a></button>
+            <button class="btn ">
+                <a class="btn btn-outline-danger"
+                    href="{{url_for('employee_delete', person_id=row.personid, customer_id=row.customerid) }}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

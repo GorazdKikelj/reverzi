@@ -1,0 +1,26 @@
+server {
+    listen 80;
+    listen  [::]:80;
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+#
+    server_name _;
+    client_max_body_size 30M;
+    include snippets/aledb-selectium.conf;
+
+#    location /aa/static {
+#        alias /home/gorazd/ale/reverzi/reverz(static;
+#    }
+    location / {
+        proxy_pass  http://unix:/home/gorazd/ale/reverzi/reverzi.sock;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+    }
+
+    location /nginx_status {
+        stub_status;
+        allow 127.0.0.1;
+        allow 10.100.0.81;
+        deny all;
+    }
+}

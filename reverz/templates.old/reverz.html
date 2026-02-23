@@ -1,0 +1,63 @@
+{% extends 'clean.html' %}
+{% block title %}
+Seznam reverzov
+{% endblock %}
+
+{% block content %}
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Stranka</th>
+            <th scope="col">Prevzel</th>
+            <th scope="col">Izdal</th>
+            <th scope="col">Datum izdaje</th>
+            <th scope="col">Datum poteka</th>
+            <th scope="col">Datum vrnitve</th>
+            <th scope="col">Namen</th>
+            <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+
+        {% for reverz in reverzi %}
+        <tr>
+            <td>{{ reverz.reverz }}</td>
+            <td>{% if  reverz.aktiven %}
+                <i class="bi bi-check-circle-fill" style="color: green;"></i><br>Aktiven
+                {% else %}
+                <i class="bi bi-x-circle-fill" style="color: red;"></i><br>Zaključen
+                {% endif %}
+            </td>
+            <td>{{ reverz.stranka }}<br>{{ reverz.naslov }}</td>
+            <td>{{ reverz.prevzel }}</td>
+            <td>{{ reverz.izdal }}</td>
+            <td>{{ reverz.datum_izdaje }}</td>
+            <td>{{ reverz.cas_testiranja_do or "" }}
+                {% if reverz.cas_testiranja_do|string < datum_now and reverz.aktiven %}
+                <strong>POTEKEL</strong>
+                {% endif %}
+
+            </td>
+            <td>{{ reverz.datum_dejanske_vrnitve or "" }}</td>
+            <td>{{ reverz.namen_testiranja }}</td>
+            <td>
+                <button class="btn btn-sm btn-outline btn-success btn-dark btn-outline-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-printer" viewBox="0 0 16 16">
+                        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+                        <path
+                            d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
+                    </svg>
+                    <a href=/reverz/{{reverz.reverz}}>Izpis</a>
+                </button>
+                <button class="btn btn-sm btn-outline btn-secondary btn-dark btn-outline-secondary">Complete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,12 @@
+[Unit]
+Description=Gunicorn instance to serve Reverzi
+After=network.target
+
+[Service]
+User=gorazd
+Group=www-data
+WorkingDirectory=/home/gorazd/ale/reverzi
+Environment="PATH=/home/gorazd/ale/reverzi"
+ExecStart=/usr/local/bin/gunicorn --bind unix:reverzi.sock run:app --workers 3 --timeout 600
+[Install]
+WantedBy=multi-user.target

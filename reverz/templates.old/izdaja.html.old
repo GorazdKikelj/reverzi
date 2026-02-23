@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}
+  Izdaja reverza
+{% endblock %}
+
+{% block content %}
+<body>
+<div class="container-fluid">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <h3>Izpis reverza</h3>
+        </div>
+        <div class="col-md-8"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissable dade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            
+            <div class="card text-center bg-dark">
+                <div class="card-body">
+                    <form method="POST" class="form-izdaja" style="color:white">
+                        {{ izdaja_form.hidden_tag() }}
+<!--            
+                    <form action="{{url_for("customer_page")}}" method="POST">
+-->
+                    <div class="form-group">
+                        {{ izdaja_form.reverz_id.label() }}
+                        {{ izdaja_form.reverz_id(class="form-control", placeholder="Številka reverza") }}
+                    </div>
+                    <div class="checkbox mb-3">
+                        <h6>Novi reverz?</h6>
+                        <a class="btn btn-sm btn-secondary" href="{{ url_for('reverz_page') }}">Dodaj reverz</a>
+                     </div>
+                </div>
+                <div class="card-footer">
+                    {{ izdaja_form.submit(class="btn btn-sm btn-block btn-primary") }}
+                </div>
+                </form>
+            </div>
+        </div>
+
+<!--
+    <div class="container">
+        <form method="POST" class="form-izdaja" style="color:white">
+            {{ izdaja_form.hidden_tag() }}
+
+           <img class="mb-4" src="/static/HPE SELECTIUM SMALL_pri_wht_rev_rgb.svg" alt="">   
+
+            <h1 class="h3 mb-3 font-weight-normal">
+                Izpis reverza
+            </h1>
+            <br>
+            {{ izdaja_form.reverz_id.label() }}
+            {{ izdaja_form.reverz_id(class="form-control", placeholder="Številka reverza") }}
+            <br>
+
+
+        </form>
+    </div>
+-->
+</body>
+{% endblock %}

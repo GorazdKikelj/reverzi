@@ -1,0 +1,137 @@
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{url_for('home_page')}}">
+                <img src="{{url_for('static',filename='HPE SELECTIUM_pri_grn_pos_rgb.svg')}}" width="177px"
+                    height="74px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="home" href="{{ url_for('home_page') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('reverz_page') }}">Reverzi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('customer_page') }}">Stranke</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('person_page') }}">Osebe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('employee_page') }}">Zaposleni</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('product_page') }}">Produkti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('inventory_page') }}">Inventar</a>
+                    </li>
+
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Splošno
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('category_page') }}">Kategorije</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('demopool_page') }}">Demo pool</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('help_edit_page') }}">Edit Help</a></li>
+                            <li><a class="dropdown-item"
+                                    href="{{ url_for('help_edit', id=request.path|replace('/','#'), base_page='True') }}"
+                                    method="'POST">Edit Page Help</a></li>
+                            <li><a class="dropdown-item"
+                                    href="{{ url_for('help_edit', id=request.path|replace('/','#'), base_page='False') }}"
+                                    method="'POST">Edit Current Page Help</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('inventory_inventura') }}">Inventurna
+                                    lista</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home_page', limit=1) }}">Reverzi potečejo
+                                    v 7 dneh</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('inventory_export') }}">Export za ASP
+                                    portal</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="window.print();" title="Print">
+                                    <i class="bi bi-printer"></i> Print</a>
+                            </li>
+                            <li>
+                                <a class="btn" href="{{url_for('backup_page')}}" name="backup" title="Backup database">
+                                    <i class="bi bi-cassette"></i> DB Backup
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        {% if no_search %}
+                        {% else %}
+
+                        <form action="{{url_for('inventory_search', id='1')}}" method="POST" , id="search">
+                            <div class="input-group">
+                                <div class="form-outline">
+                                    <input type="search" name="id_search" id="search" class="form-control"
+                                        placeholder="Search" />
+
+                                </div>
+
+                                <button type="submit" class="btn has-spinner" value="Išči">
+                                    <i class="bi bi-search"></i>
+                                    <span class="spinner spinner-border text-primary spinner-border-lg" role="status">
+                                    </span>
+                                </button>
+                            </div>
+
+                        </form>
+
+                        {% endif %}
+                    </li>
+                </ul>
+                {% if no_search %}
+                {% else %}
+
+                <a class="btn has-spinner" href="{{url_for('search_page')}}" name="search" title="Iskanje">
+                    <span class="spinner spinner-border text-primary spinner-border-lg" role="status">
+                    </span>
+                    <i class="bi bi-search"></i>
+                </a>
+                {% endif %}
+                {% set id_req = request.path|replace('/','#') %}
+                {% set url = url_for('help_page', id=id_req) %}
+
+                <!--
+                <a class="btn" href="{{url}}" name="help" title="Pomoč na strani">
+                    <i class="bi bi-question-lg"></i>
+                </a>
+                -->
+                <!-- Modal help -->
+                <button data-id='{{id_req}}' data-fnc='help' class="helpModal btn" data-bs-target="#helpModal"
+                    data-target="#reverzModal">
+                    <i class="bi bi-question-lg"> </i>
+                </button>
+
+
+                <!-- Modal help -->
+
+                <a class="btn" href="#" onclick="window.print();" name="printer" title="Print">
+                    <i class="bi bi-printer"></i></a>
+                <a class="btn has-spinner" href="{{url_for('logout_page')}}" name="logout" title="Odjava">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+
+            </div>
+
+        </div>
+    </nav>

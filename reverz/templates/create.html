@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}
+  Novi reverz
+{% endblock %}
+
+
+{% block pagetitle %}
+Novi reverz - se ne uporablja več
+{% endblock %}
+
+{% block entryform %}
+{{request.path}}
+<div class="card text-center bg-dark">
+    <div class="card-body">
+            <h3>Novi reverz</h3>
+                <form action="{{url_for('reverz_add_new_page', id=reverz_form.customer_id)}}" method="POST">
+                    {{ reverz_form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ reverz_form.customer_id.label(class="form-label") }}
+                        {{ reverz_form.customer_id(class="form-control", readonly="true") }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.customer_person_id.label(class="form-label") }}
+                        {{ reverz_form.customer_person_id(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.person_id.label(class="form-label") }}
+                        {{ reverz_form.person_id(class="form-control" }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.description.label(class="form-label") }}
+                        {{ reverz_form.description(class="form-control", rows="4") }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.demo_start_date.label(class="form-label") }}
+                        {{ reverz_form.demo_start_date(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.demo_end_date.label(class="form-label") }}
+                        {{ reverz_form.demo_end_date(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ reverz_form.active.label(class="form-label") }}
+                        {{ reverz_form.active(class="form-control") }}
+                    </div>
+            </div>
+            <div class="card-footer">
+                {{ reverz_form.submit(class="btn btn-lg btn-block btn-primary") }}
+            </div>
+            </form>
+
+</div>
+
+{% endblock %}
+
+{% block tableheader %}
+<th scope="col">#</th>
+<th scope="col">Product No</th>
+<th scope="col">Serial No</th>
+<th scope="col">Description</th>
+<th scope="col">Demo pool</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in inventory %}
+<tr><td>
+    <button class="btn btn-sm btn-outline btn-success btn-dark btn-outline-success">
+        <a href="{{url_for('reverz_add_item',id=row.inventarna_st)}}"">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-check" viewBox="0 0 16 16">
+                <path d="M11.354 6.354a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg> ADD</a>
+    </button>
+    </td>
+    <td>{{ row.inventarna_st }}</td>
+    <td>{{ row.produkt }}</td>
+    <td>{{ row.serijska_st }}</td>
+    <td>{{ row.opis }}</td>
+    <td>{{ row.demo_pool }}</td>
+</tr>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'clean.html' %}
+{% block title %}
+Reverz za stranko {{ customer_data.stranka }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container px-4 text-start">
+    <div class="row align-item-start">
+        <div class="col">
+
+            <p>Selectium Adriatics d.o.o.<br>
+                Letališka cesta 29c<br>
+                1000 Ljubljana<br>
+                Slovenija</p>
+        </div>
+        <div class="col">
+            <h3>REVERZ: {{ customer_data.reverz}}</h3>
+            {% if not customer_data.aktiven %}
+            <h3>ZAKLJUČEN</h3>
+            {% endif %}
+            <p>Izdan: {{ customer_data.datum_izdaje }}<br>
+                Velja do: {{ customer_data.cas_testiranja_do }}</p>
+            Namen testiranja:<p> {{ customer_data.namen_testiranja }}</p>
+        </div>
+        <div class="col">
+            <h3><br>{{ customer_data.stranka }}</h3>
+            {{ customer_data.naslov }}</p>
+            Kontakt: {{ customer_data.prevzel }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <table class="table table-hover table-light table-bordered border-primary table-primary table-sm">
+            <thead>
+                <tr>
+                    <!-- Your Columns HERE -->
+                    <th scope="col">Part No.</th>
+                    <th scope="col">Serial No.</th>
+                    <th scope="col">Opis</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <!-- Your rows inside the table HERE: -->
+
+                {% for reverz in reverz_data %}
+                <tr>
+                    <td>{{ reverz.koda }}</td>
+                    <td>{{ reverz.serijska }}</td>
+                    <td>{{ reverz.opis }}
+                        {% if reverz.dolgiopis==None or reverz.dolgiopis=='' %}
+                        {% else %}
+                        <pre>{{ reverz.dolgiopis }}</pre>
+                        {% endif %}
+                        {% if reverz.namen==None or reverz.namen=='' %}
+                        {% else %}
+                        <hr>
+                        <pre>{{ reverz.namen }}</pre>
+                        {% endif %}
+                        {% if reverz.notes==None or reverz.notes=='' or reverz.notes==' ' %}
+                        {% else %}
+                        <hr><strong>Notes:</strong><br />
+                        <pre>{{ reverz.notes }}</pre>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div>
+    <p><br></p>
+    <p><br></p>
+</div>
+<div class="row align-item-start text-center">
+    <div class="col"">
+            V Ljubljani dne: {{ datum_now }}
+        </div>
+        <div class=" col">
+        Prevzel: {{ customer_data.prevzel }}
+    </div>
+    <div class="col">
+        Izdal: {{ customer_data.izdal }}
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block page_style %}
+<style>
+    body {
+        height: 297mm;
+        width: 210mm;
+    }
+</style>
+
+{% endblock %}

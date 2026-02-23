@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}
+Reverzi izdaja
+{% endblock %}
+
+
+{% block pagetitle %}
+Reverzi
+{% endblock %}
+
+{% block entryform %}
+
+<div class="card text-center mb-3 bg-secondary" style="--bs-bg-opacity: .10;">
+    <div class="card-body">
+        <h3>Novi reverz</h3>
+        <form action="{{url_for('reverz_add_page')}}" method="POST">
+            {{ reverz_form.hidden_tag() }}
+            <div class="form-group">
+                {{ reverz_form.id.label(class="form-label") }}
+                {{ reverz_form.id(class="form-control") }}
+            </div>
+    </div>
+    <div class="card-footer">
+        {{ reverz_form.submit(class="btn btn-primary") }}
+    </div>
+    </form>
+
+</div>
+
+<div class="card text-center mb-3 bg-secondary" style="--bs-bg-opacity: .25;">
+    <div class="card-body">
+        <h3>Izpis reverza</h3>
+        <form method="POST">
+            {{ izdaja_form.hidden_tag() }}
+            <div class="form-group">
+                {{ izdaja_form.reverz_id.label() }}
+                {{ izdaja_form.reverz_id(class="form-control", placeholder="Številka reverza") }}
+            </div>
+    </div>
+    <div class="card-footer">
+        {{ izdaja_form.submit(class="btn btn-primary") }}
+    </div>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top" class="d-flex justify-content-center">Akcija</th>
+<th data-valign=" top" data-field="reverz" data-filter-control="select" data-sortable="True">Reverz</th>
+<th data-valign="top" data-field="aktiven" data-filter-control="select" data-sortable="True">Status</th>
+<th data-valign="top" data-field="stranka" data-filter-control="input" data-sortable="True">Stranka</th>
+<th data-valign="top" data-field="prevzel" data-filter-control="input" data-sortable="True">Prevzel</th>
+<th data-valign="top">Datum izdaje</th>
+<th data-valign="top">Datum poteka</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in reverzi %}
+<tr>
+    <td class="d-grid gap-2 d-md-flex  justify-content-center">
+        <button class="btn btn-sm">
+            <a href="{{url_for('reverz_print_page',id=row.reverz)}}" title="Print">
+                <i class="bi bi-printer"></i>
+            </a>
+        </button>
+
+        <button class="btn btn-sm">
+            <a href="{{url_for('reverz_edit',id=row.reverz)}}" title="Edit">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+        </button>
+        <button class="btn btn-sm">
+            <a href="{{ url_for('reverz-view',id=row.reverz|string )}}" title="View">
+                <i class="bi bi-eye"></i>
+            </a>
+        </button>
+        <!-- Button trigger modal -->
+        <button class="reverzModal{{row.reverz}} btn" data-bs-toggle="modal" data-bs-target="#reverzModal{{row.reverz}}"
+            data-bs-id="{{row.reverz}}" data-id='{{row.reverz}}' data-fnc="reverz" title="Info">
+            <i class="bi bi-info-square"></i>
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="reverzModal{{row.reverz}}" tabindex="-1" aria-labelledby="{{row.reverz}}"
+            aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reverzModalLabel{{row.reverz}}">Reverz {{row.reverz}}
+                            podrobnosti
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table-responsive table-sm table-hover bg-white"
+                            id="reverzModalBody{{row.reverz}}">
+                            <tr>
+                                <td>Status:</td>
+                                <td>
+                                    <h5>{% if row.cas_testiranja_do|string < datum_now and row.aktiven %} POTEKEL {%
+                                            elif row.aktiven %} IZDAN {% else %} ZAKLJUČEN {% endif %}</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Stranka:</td>
+                                <td>{{ row.stranka or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Naslov:</td>
+                                <td>{{ row.naslov or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Prevzel:</td>
+                                <td>{{ row.prevzel or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Izdal:</td>
+                                <td>{{ row.izdal or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Datum izdaje:</td>
+                                <td>{{ row.datum_izdaje or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Izdan do:</td>
+                                <td>{{ row. cas_testiranja_do or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Datum vračila:</td>
+                                <td>{{ row.vrnjeno or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Namen testiranja:</td>
+                                <td>{{ row.namen_testiranja or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Rezultat testiranja:</td>
+                                <td>{{ row.rezultat_testiranja or "" }}</td>
+                            </tr>
+                            <tr>
+                                <td>Zadnja sprememba:</td>
+                                <td>{{ row.last_update or "" }} {{ row.last_user  or "" }}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </td>
+    <td>{{ row.reverz }}</td>
+    <td>{% if row.aktiven %}<i class="bi bi-check-circle-fill" style="color: green;"></i> Aktiven {% else %} <i
+            class="bi bi-x-circle-fill" style="color: red;"></i> Zaključen
+        {% endif %}</td>
+    <td>{{ row.stranka }}</td>
+    <td>{{ row.prevzel }}</td>
+    <td>{{ row.datum_izdaje }}</td>
+    <td>{{ row.cas_testiranja_do }}
+        {% if row.cas_testiranja_do|string < datum_now and row.aktiven %} <strong>POTEKEL</strong>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

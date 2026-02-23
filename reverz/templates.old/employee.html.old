@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}
+  Employees
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row text-center">
+    <div class="col-md-4">
+        <h3>Employees</h3>
+    </div>
+    <div class="col-md-8"></div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable dade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <div class="card text-center bg-dark">
+            <div class="card-body">
+            <form action="{{url_for("employee_page")}}" method="POST">
+                {{ employee_form.hidden_tag() }}
+                <div class="form-group text-bg-dark">
+                    {{ employee_form.person_id.label() }}
+                    {{ employee_form.person_id(class="form-control") }}
+                </div>
+                <div class="form-group text-bg-dark">
+                    {{ employee_form.customer_id.label() }}
+                    {{ employee_form.customer_id(class="form-control") }}
+                </div>
+                <div class="form-group text-bg-dark">
+                    {{ employee_form.title.label() }}
+                    {{ employee_form.title(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ employee_form.status.label() }}
+                    {{ employee_form.status(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ employee_form.email.label() }}
+                    {{ employee_form.email(class="form-control") }}
+                </div> 
+            </div>
+            <div class="card-footer">
+                {{ employee_form.submit(class="btn btn-sm btn-block btn-primary") }}
+            </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="col-md-8">
+        <table id="employee_list" class="table table-sm table-hover table-dark">
+            <thead>
+                <tr class="text-white bg-secondary" scope="row">
+                    <td scope="col">Company</td>
+                    <td scope="col">Name</td>
+                    <td scope="col">Title</td>
+                    <td scope="col">Active</td>
+                    <td scope="col">Company Email</td>
+                    <td scope="col">Last change</td>
+                    <td scope="col">Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in employees %}
+                <tr>
+                    <td scope=""row">{{ row.customer }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.title }}</td>
+                    <td>{{ row.status }}</td>
+                    <td>{{ row.companyemail }}</td>
+                    <td>{{ row.last_update }}</td>
+                    <td><button class="btn btn-sm btn-dark btn-info btn-outline-info">
+                            <a href="/employee/edit/{{ row.personid }}/{{ row.customerid}}">Edit</a>
+                        </button>
+                        <button class="btn btn-sm btn-dark btn-danger btn-outline-danger">
+                            <a href="/employee/delete/{{ row.personid }}/{{ row.customerid}}">Delete</a>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        {% include 'bootstrap.html' %}
+        <title>
+            {% block title %}
+
+            {% endblock title %}
+        </title>
+    </head>
+    {% include 'header.html' %}
+    <div class="row">
+        <div class="col-md-12">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert  alert-{{category}} alert-dismissable fade show" role="alert">
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" title="Close">
+                    <span aria-hidden="true">&nbsp;</span>
+                </button>
+                <pre>{{ message }}</pre>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% block content %}
+    {% endblock content %}
+    {% extends 'footer.html' %}

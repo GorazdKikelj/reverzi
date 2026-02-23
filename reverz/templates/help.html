@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}
+Pomoč
+{% endblock %}
+
+
+{% block pagetitle %}
+Pomoč
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;"">
+    <div class=" card-body">
+    {% if request.path == url_for('help_edit_page') or new_page=="True" %}
+    <form action="{{url_for('help_edit_page')}}" method="POST">
+        {% else %}
+        <form action="{{url_for('help_update', id=help_form.page.data)}}" method="POST">
+            {% endif %}
+            {{ help_form.hidden_tag() }}
+            <div class="form-group">
+                {{ help_form.page.label() }}
+                {% if request.path == url_for('help_edit_page') or new_page=="True" %}
+                {{ help_form.page(class="form-control", placeholder="Help Page Key") }}
+                {% else %}
+                {{ help_form.page(class="form-control", placeholder="Help Page Key", readonly="true") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ help_form.help_entry.label() }}
+                {{ help_form.help_entry(class="form-control", rows="10", placeholder="Help text") }}
+            </div>
+</div>
+<div class="card-footer">
+    {{ help_form.submit(class="btn btn-primary") }}
+    <button class="btn ">
+        <a class="btn btn-info" href="{{url_for('help_edit_page')}}">Prekliči</a>
+    </button>
+</div>
+</form>
+{{ ckeditor.load(pkg_type='standard') }}
+{{ ckeditor.config(name='help_entry', height=600, custom_config="extraAllowedContent: 'h4 i'") }}
+</div>
+{% endblock %}
+
+{% block tableheader %}
+<th>Ključ</th>
+<th>Pomoč</th>
+<th>Zadnja sprememba</th>
+<th>Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in help_pages %}
+<tr>
+    <td>{{ row.page }}</td>
+    <td>{{ row.help_entry | safe }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or "" }}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary" href="{{url_for('help_edit', id=row.page)}}">Edit</a></button>
+            <button class="btn">
+                <a class="btn btn-outline-danger" href="{{url_for('help_delete',id=row.page)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

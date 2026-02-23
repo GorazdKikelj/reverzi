@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}
+Osebe
+{% endblock %}
+
+{% block pagetitle %}
+Osebe
+{% endblock %}
+
+{% block entryform %}
+<div class="card text-center bg-secondary" style="--bs-bg-opacity: .10;">
+    <div class="card-body">
+
+        {% if request.path == url_for('person_page') %}
+        <form action="{{url_for('person_page')}}" method="POST">
+            {% else %}
+            <form action="{{url_for('person_update',id=per['id'])}}" method="POST">
+                {% endif %}
+                {{ per_form.hidden_tag() }}
+                <div class="form-group text-bg-dark">
+                    {{ per_form.name.label() }}
+                    {{ per_form.name(class="form-control", placeholder="Name") }}
+                    {% for error in per_form.name.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ per_form.email.label() }}
+                    {{ per_form.email(class="form-control", placeholder="you@email.com") }}
+                    {% if per_form.email.errors %}
+                    {% for error in per_form.email.errors %}
+                    {{ error }}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ per_form.phone.label() }}
+                    {{ per_form.phone(class="form-control", placeholder="Phone") }}
+                </div>
+    </div>
+    <div class="card-footer">
+        {{ per_form.submit(class="btn btn-primary") }}
+        {% if request.path == url_for('employee_page') %}
+        {% else %}
+        <button class="btn ">
+            <a class="btn btn-info" href="{{url_for('person_page')}}">Prekliči</a>
+        </button>
+        {% endif %}
+
+    </div>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block tableheader %}
+<th data-valign="top">#</th>
+<th data-valign="top" data-field="Name" data-filter-control="input" data-sortable="True">Ime in priimek</th>
+<th data-valign="top">Osebni Email</th>
+<th data-valign="top">Telefon</th>
+<th data-valign="top">Zadnja sprememba</th>
+<th data-valign="top">Akcije</th>
+{% endblock %}
+
+{% block tablerows %}
+{% for row in persons %}
+<tr>
+    <td>{{ row.id }}</td>
+    <td>{{ row.Name }}</td>
+    <td>{{ row.Email }}</td>
+    <td>{{ row.Phone }}</td>
+    <td>{{ row.last_update }} {{ row.last_user or ""}}</td>
+    <td>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button class="btn ">
+                <a class="btn btn-outline-primary" href="{{url_for('person_edit', id=row.id)}}">Edit</a></button>
+            <button class="btn">
+                <a class="btn btn-outline-danger" href="{{url_for('person_delete', id=row.id)}}">Delete</a></button>
+        </div>
+    </td>
+</tr>
+{% endfor %}
+{% endblock %}

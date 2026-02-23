@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}
+  Products
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row text-center">
+    <div class="col-md-4">
+        <h3>Products</h3>
+    </div>
+    <div class="col-md-8"></div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable dade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <div class="card text-center bg-dark">
+            <div class="card-body">
+            <form action="/product/update/{{pro.ProductNo}}" method="POST">
+                {{ product_form.hidden_tag() }}
+<!--                <img class="mb-4" src="static/HPE Selectium logo.jpg" alt=""> -->
+                <div class="form-group text-bg-dark">
+                    {{ product_form.productno.label() }}
+                    {{ product_form.productno(class="form-control", readonly='true') }}
+                </div>
+                <div class="form-group text-bg-dark">
+                    {{ product_form.description.label() }}
+                    {{ product_form.description(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ product_form.longdescription.label() }}
+                    {{ product_form.longdescription(class="form-control", rows="4") }}
+                </div>
+                <div class="form-group">
+                    {{ product_form.category.label() }}
+                    {{ product_form.category(class="form-control") }}
+                </div> 
+            </div>
+            <div class="card-footer">
+                {{ product_form.submit(class="btn btn-sm btn-block btn-primary") }}
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table id="product_list" class="table table-sm table-bordered table-dark">
+            <thead>
+                <tr>
+                    <td>Product #</td>
+                    <td>Description</td>
+                    <td>Long Description</td>
+                    <td>Category</td>
+                    <td>Last change</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in products %}
+                <tr>
+                    <td>{{ row.ProductNo }}</td>
+                    <td>{{ row.Description }}</td>
+                    <td>{{ row.LongDescription }}</td>
+                    <td>{{ row.Category }}</td>
+                    <td>{{ row.last_update }}</td>
+                    <td><a href="/product/edit/{{ row.ProductNo }}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="/product/delete/{{ row.ProductNo }}" class="btn btn-secondary btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
+</div>
+</div>
+{% endblock %}

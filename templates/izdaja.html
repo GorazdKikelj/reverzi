@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}
+Seznam reverzov
+{% endblock %}
+
+{% block content %}
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">ID</th>
+            <th scope="col">Status</th>
+            <th scope="col">Stranka</th>
+            <th scope="col">Prevzel</th>
+            <th scope="col">Izdal</th>
+            <th scope="col">Datum izdaje</th>
+            <th scope="col">Datum poteka</th>
+            <th scope="col">Datum vrnitve</th>
+            <th scope="col">Namen</th>
+            <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+
+        {% for reverz in reverzi %}
+        <tr>
+            <td>{{ reverz.reverz }}</td>
+            <td>{{ reverz.aktiven }}</td>
+            <td>{{ reverz.stranka }}<br>{{ reverz.naslov }}</td>
+            <td>{{ reverz.prevzel }}</td>
+            <td>{{ reverz.izdal }}</td>
+            <td>{{ reverz.datum_izdaje }}</td>
+            <td>{{ reverz.cas_testiranja_do }}</td>
+            <td>{{ reverz.datum_dejanske_vrnitve }}</td>
+            <td>{{ reverz.namen_testiranja }}</td>
+            <td>
+                <button class="btn btn-outline btn-info">More Info</button>
+                <button class="btn btn-outline btn-success">Complete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
