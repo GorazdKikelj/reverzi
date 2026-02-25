@@ -7,3 +7,5 @@
 /fieldlist_run.py
 /reverz.log
 /reverzi.sock
+/reverz/__pycache__
+/reverz/templates.old
